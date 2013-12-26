@@ -1,0 +1,13 @@
+body {
+    padding-top: 70px;
+}
+
+.section {
+    margin-bottom: 10px;
+}
+
+.effected {
+    color: #ff0000 !important;
+    font-weight: bold !important;
+}
+

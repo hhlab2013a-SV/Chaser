@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8">
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+        <link href="css/codemirror.css" rel="stylesheet">
+        <link href="css/style.css" rel="stylesheet">
+    </head>
+
+    <body>
+        <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="index.html">Kirakira Javascript</a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav">
+                    </ul>
+                </div><!-- /.nav-collapse -->
+            </div><!-- /.container -->
+        </div>
+        <div class="container">
+            <div class="row section">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default" id="execute">実行</button>
+                    <button type="button" class="btn btn-default" id="stop">停止</button>
+                    <button type="button" class="btn btn-default" id="sample1">サンプル1</button>
+                    <button type="button" class="btn btn-default" id="sample2">サンプル2</button>
+                </div>
+            </div>
+            <div class="row section">
+                <div class="col-md-6">
+                    <h3>変換前</h3>
+                    <textarea id="code" name="code"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <h3>変換後</h3>
+                    <textarea id="compiled" name="compiled"></textarea>
+                </div>
+            </div>
+            <div class="row section">
+                <div class="col-md-12">
+                    <h3>生成データ</h3>
+                    <textarea id="data" name="data"></textarea>
+                </div>
+            </div>
+            <div class="row section">
+            </div>
+        </div>
+        <script src="js/jquery-2.0.3.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/codemirror-compressed.js"></script>
+        <script src="js/uglifyjs.js"></script>
+        <script src="js/kirakira_javascript.js"></script>
+        <script>
+            String.prototype.splice = function(idx, rem, s) {
+                var line = (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
+                return line; 
+            };
+
+            function strip(string) {
+                return string.replace(/^\s*(.*?)\s*$/, "$1");
+            }
+
+            function addQueue(obj) {
+                queue.push(obj);
+                return true;
+            }
+
+            var lines = [];
+            var queue = [];
+            var timerId = "";
+
+            var $code = $("#code");
+            var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+                lineNumbers: true,
+                lineWrapping: true
+            });
+
+            var editorCompiled = CodeMirror.fromTextArea(document.getElementById("compiled"), {
+                lineNumbers: true,
+                lineWrapping: true
+            });
+
+            var editorData = CodeMirror.fromTextArea(document.getElementById("data"), {
+                lineNumbers: true,
+                lineWrapping: true
+            });
+
+            $("#sample1").on("click", function() {
+                var initialCode = "";
+                initialCode += "var a = \"A\";\n"; 
+                initialCode += "\n";
+                initialCode += "a = 1;\n"; 
+                initialCode += "\n";
+                initialCode += "if(a > 0) {\n";
+                initialCode += "    a = a + 1;\n";
+                initialCode += "} else {\n";
+                initialCode += "    a = a - 1;\n";
+                initialCode += "}\n";
+                initialCode += "\n";
+                initialCode += "for(var i = 0; i < 5; i++) {\n";
+                initialCode += "    a = a + 1;\n";
+                initialCode += "}\n";
+                initialCode += "\n";
+                initialCode += "\n";
+                initialCode += "\n";
+                initialCode += "\n";
+
+                editor.setValue(initialCode);
+            });
+
+
+            $("#sample2").on("click", function() {
+                var initialCode = "";
+                initialCode += "var a = \"A\";\n"; 
+                initialCode += "\n";
+                initialCode += "a = 1;\n"; 
+                initialCode += "\n";
+                initialCode += "var b = a;\n";
+                initialCode += "\n";
+                initialCode += "var c = function(x) {\n";
+                initialCode += "    var y = 0;\n";
+                initialCode += "    return y * y;\n";
+                initialCode += "};\n";
+                initialCode += "\n";
+
+                editor.setValue(initialCode);
+            });
+
+            function showLineEffect(index) {
+                if(typeof index == "number") {
+                    index = [index];
+                }
+
+                for(var i = 0, l = index.length; i <= l; i++) {
+                    (function() {
+                        var $pre = $(".CodeMirror-code pre:eq(" + index[i] + ")");
+
+                        $pre.addClass("effected");
+                        setTimeout(function() {
+                            $pre.removeClass("effected");
+                        }, 300);
+                    })();
+                }
+            }
+
+            function start() {
+            }
+
+            function stop() {
+                clearInterval(timerId);
+                timerId = null;
+            }
+
+            $("#execute").on("click", function() {
+                if(timerId) {
+                    return;
+                }
+
+                var source = editor.getValue();
+                source = execute(source);
+                editorCompiled.setValue(source);
+
+                queue = [];
+                eval(source);
+                console.log(queue);
+                editorData.setValue(JSON.stringify(queue, null, 4));
+
+                return;
+                timerId = setInterval(function() {
+                    if(queue.length == 0) {
+                        clearInterval(timerId);
+                        timerId = null;
+                     } else {
+                        showLineEffect(queue.shift());
+                    }
+                }, 250); 
+            });
+
+            $("#stop").on("click", function() {
+                stop();
+            });
+        </script>
+    </body>
+</html>
