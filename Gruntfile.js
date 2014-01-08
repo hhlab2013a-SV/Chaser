@@ -1,9 +1,10 @@
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-mocha-test');
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    sources = ['src/parser.js', 'src/replacer.js', 'src/executor.js']
+    sources = ['src/chaser.js']
 
     grunt.initConfig({
         concat: {
@@ -14,6 +15,12 @@ module.exports = function(grunt) {
             sample: {
                 src:  sources,
                 dest: 'sample/js/chaser.js'
+            }
+        },
+
+        jshint: {
+            files: {
+                src: ['src/**/*.js']
             }
         },
 
@@ -29,5 +36,5 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', ['concat', 'mochaTest:all']);
+    grunt.registerTask('default', ['concat', 'mochaTest:all', 'jshint']);
 };
