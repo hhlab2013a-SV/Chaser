@@ -1,3 +1,5 @@
 node_modules/
 target/
 sample/js/kirakira_javascript.js
+.DS_Store
+.idea

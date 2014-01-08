@@ -164,13 +164,11 @@
                 }
 
                 var source = editor.getValue();
-                source = execute(source);
+                source = replace(source);
                 editorCompiled.setValue(source);
 
-                queue = [];
-                eval(source);
-                console.log(queue);
-                editorData.setValue(JSON.stringify(queue, null, 4));
+                result = execute(source);
+                editorData.setValue(JSON.stringify(result, null, 4));
 
                 return;
                 timerId = setInterval(function() {

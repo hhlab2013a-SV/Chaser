@@ -1,15 +1,17 @@
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
 
+    sources = ['src/parser.js', 'src/replacer.js', 'src/executor.js']
+
     grunt.initConfig({
         concat: {
             target: {
-                src:  ['src/parser.js', 'src/executor.js'],
-                dest: 'target/kirakira_javascript.js',
+                src:  sources,
+                dest: 'target/kirakira_javascript.js'
             },
             sample: {
-                src: ['src/parser.js', 'src/executor.js'],
-                dest: 'sample/js/kirakira_javascript.js',
+                src:  sources,
+                dest: 'sample/js/kirakira_javascript.js'
             }
         }
     });
