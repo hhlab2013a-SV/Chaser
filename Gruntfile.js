@@ -1,5 +1,6 @@
 module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-concat');
+    grunt.loadNpmTasks('grunt-mocha-test');
 
     sources = ['src/parser.js', 'src/replacer.js', 'src/executor.js']
 
@@ -13,8 +14,14 @@ module.exports = function(grunt) {
                 src:  sources,
                 dest: 'sample/js/kirakira_javascript.js'
             }
+        },
+
+        mochaTest: {
+            all: {
+                src: ['test/**/*.js']
+            }
         }
     });
 
-    grunt.registerTask('default', ['concat']);
+    grunt.registerTask('default', ['concat', 'mochaTest:all']);
 };
