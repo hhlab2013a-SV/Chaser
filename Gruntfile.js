@@ -20,7 +20,10 @@ module.exports = function(grunt) {
 
         jshint: {
             files: {
-                src: ['src/**/*.js']
+                src: ['src/**/*.js'],
+                options: {
+                    force: true
+                }
             }
         },
 
@@ -36,5 +39,5 @@ module.exports = function(grunt) {
         }
     });
 
-    grunt.registerTask('default', ['concat', 'mochaTest:all', 'jshint']);
+    grunt.registerTask('default', ['concat', 'jshint', 'mochaTest:all' ]);
 };

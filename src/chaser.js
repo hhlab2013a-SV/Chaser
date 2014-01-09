@@ -203,18 +203,16 @@
         var ast = UglifyJS.parse(source);
         var stream = UglifyJS.OutputStream({});
         ast.print(stream);
-        console.log(ast);
-        console.log(stream.toString());
 
         for(var i = 0, il = ast.body.length; i < il; i++) {
             Chaser.parseNode(ast.body[i]);
         }
-        console.log(Chaser.insertFunctions);
 
         for(
-                var i = 0, current_pos = 0, line_num = 0, line_length = lines[0].length + 1, offset = 0;
-                i < Chaser.insertFunctions.length;
-                i++) {
+            var i = 0, current_pos = 0, line_num = 0, line_length = lines[0].length + 1, offset = 0;
+            i < Chaser.insertFunctions.length;
+            i++) {
+
             var insertFunction = Chaser.insertFunctions[i];
             while(insertFunction.pos > current_pos + line_length) {
                 current_pos += line_length;
@@ -242,7 +240,6 @@
 
         Chaser.replacedSource = Chaser.replace(source);
         eval(Chaser.replacedSource);
-        console.log(Chaser.queue);
 
         return Chaser.queue;
     };
