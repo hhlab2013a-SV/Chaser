@@ -1,9 +1,17 @@
 var assert = require("assert");
+var Chaser = require("../target/chaser.js");
 
-describe("Array", function() {
-    describe("#indexOf()", function() {
-        it("should return -1 when ther value is not present", function() {
-            assert.equal(-1, [1, 2, 3].indexOf(5));
+describe("Chaser", function() {
+    describe("#test()", function() {
+        it("should return 'test'", function() {
+            assert.equal("test", Chaser.test());
+        });
+    });
+
+    describe("#execute()", function() {
+        it("should return execution log", function() {
+            assert.equal(null, Chaser.execute("var a = 0;"));
         });
     });
 });
+

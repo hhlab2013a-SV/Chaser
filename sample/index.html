@@ -58,11 +58,6 @@
         <script src="js/uglifyjs.js"></script>
         <script src="js/chaser.js"></script>
         <script>
-            String.prototype.splice = function(idx, rem, s) {
-                var line = (this.slice(0, idx) + s + this.slice(idx + Math.abs(rem)));
-                return line; 
-            };
-
             function strip(string) {
                 return string.replace(/^\s*(.*?)\s*$/, "$1");
             }
@@ -164,10 +159,9 @@
                 }
 
                 var source = editor.getValue();
-                source = Chaser.replace(source);
-                editorCompiled.setValue(source);
 
                 result = Chaser.execute(source);
+                editorCompiled.setValue(Chaser.replacedSource);
                 editorData.setValue(JSON.stringify(result, null, 4));
 
                 return;
